@@ -25,7 +25,7 @@ public class DatosAgrupaciones {
     public DatosAgrupaciones() {
     }
 
-    public DatosAgrupaciones(int id, String nombre, String modalidad, int numComponentes, String autorLetra, String autorMusica, String director, String localidad, Blob imagenAgrupacion) {
+    public DatosAgrupaciones(int id,String nombre, String modalidad, int numComponentes, String autorLetra, String autorMusica, String director, String localidad, Blob imagenAgrupacion) {
         this.id = id;
         this.nombre = nombre;
         this.modalidad = modalidad;

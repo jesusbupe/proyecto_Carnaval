@@ -27,6 +27,14 @@ public class NewJFrame extends javax.swing.JFrame {
             System.out.println(agrupacion.get(i).getId()+","+agrupacion.get(i).getNombre()+","+agrupacion.get(i).getModalidad()+","+agrupacion.get(i).getNumComponentes()+","+agrupacion.get(i).getAutorLetra()+","+agrupacion.get(i).getAutorMusica()+","+agrupacion.get(i).getDirector()+","+agrupacion.get(i).getLocalidad()+","+agrupacion.get(i).getImagenAgrupacion());
 
         }
+       //DatosAgrupaciones agrupacion1 = new DatosAgrupaciones("El espiritu de Cai","Comparsa",12,"Tino Tovar","Tino Tovar","Juanito","Cadiz",null);
+        //gestion.Insert(agrupacion1);
+        //gestion.delete(agrupacion1);
+      // gestion.Insert(agrupacion1);
+        System.out.println(agrupacion.get(3).getId());
+        
+        
+        
     }
 
     /**
