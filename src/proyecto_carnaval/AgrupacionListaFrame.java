@@ -4,6 +4,8 @@
  */
 package proyecto_carnaval;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author DAW
@@ -15,6 +17,7 @@ public class AgrupacionListaFrame extends javax.swing.JFrame {
      */
     public AgrupacionListaFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -29,20 +32,20 @@ public class AgrupacionListaFrame extends javax.swing.JFrame {
         agrupacionListaPanel1 = new proyecto_carnaval.AgrupacionListaPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("COAC 2014");
+        setResizable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(agrupacionListaPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(agrupacionListaPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 754, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(agrupacionListaPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(agrupacionListaPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
         );
 
         pack();
@@ -79,6 +82,8 @@ public class AgrupacionListaFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new AgrupacionListaFrame().setVisible(true);
+              
+                
             }
         });
     }

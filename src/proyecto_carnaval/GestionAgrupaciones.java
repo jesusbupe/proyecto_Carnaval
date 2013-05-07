@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,12 +29,12 @@ public class GestionAgrupaciones {
     private String localidad;
     private Blob imagenAgrupacion;
 
-   public ArrayList<DatosAgrupaciones> list() {
+    public ArrayList<DatosAgrupaciones> list() {
         ArrayList<DatosAgrupaciones> informacionAgrupacion = new ArrayList();
         try {
             String sql = "Select * from agrupacion";
             stmt = Conexion.conexion.createStatement();
-           
+
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 id = rs.getInt("ID");
@@ -44,8 +45,8 @@ public class GestionAgrupaciones {
                 autorMusica = rs.getString("AutorMusica");
                 director = rs.getString("Director");
                 localidad = rs.getString("Localidad");
-
-                DatosAgrupaciones agrupacion = new DatosAgrupaciones(id, nombre, modalidad, numComponentes, autorLetra, autorMusica, director, localidad, null);
+                imagenAgrupacion =rs.getBlob("imagenAgrupacion");
+                DatosAgrupaciones agrupacion = new DatosAgrupaciones(id, nombre, modalidad, numComponentes, autorLetra, autorMusica, director, localidad, imagenAgrupacion);
                 informacionAgrupacion.add(agrupacion);
 
 
@@ -70,7 +71,7 @@ public class GestionAgrupaciones {
         imagenAgrupacion = agrupacion.getImagenAgrupacion();
 
         String sql = "INSERT INTO agrupacion (ID,nombre,modalidad,numComponentes,autorLetra,autorMusica,director,localidad,imagenAgrupacion) VALUES "
-                + "('"+id+ "','" + nombre + "','"  + modalidad + "','" + numComponentes + "','" + autorLetra + "','" + autorMusica + "','" + director + "','" + localidad + "','" + imagenAgrupacion + "')";
+                + "('" + id + "','" + nombre + "','" + modalidad + "','" + numComponentes + "','" + autorLetra + "','" + autorMusica + "','" + director + "','" + localidad + "','" + imagenAgrupacion + "')";
 
 
 
@@ -144,5 +145,38 @@ public class GestionAgrupaciones {
             return false;
         }
         return true;
+    }
+
+    protected static DatosAgrupaciones leerAgrupacion(int idAgrupacion) {
+        DatosAgrupaciones agrupacion = null;
+        try {
+            Statement sentenciaSQL = Conexion.conexion.createStatement();
+            ResultSet rs = sentenciaSQL.executeQuery(
+                    "SELECT * FROM agrupacion WHERE id = " + idAgrupacion);
+            if (rs.next()) {
+                int id = rs.getInt("ID");
+                String nombre = rs.getString("Nombre");
+                String modalidad = rs.getString("Modalidad");
+                int numComponentes = rs.getInt("NumComponentes");
+                String autorLetra = rs.getString("AutorLetra");
+                String autorMusica = rs.getString("AutorMusica");
+                String director = rs.getString("Director");
+                String localidad = rs.getString("Localidad");
+                Blob imagenAgrupacion =rs.getBlob("imagenAgrupacion");
+                agrupacion = new DatosAgrupaciones(
+                        id, nombre, modalidad, numComponentes, autorLetra, autorMusica, director,localidad,imagenAgrupacion);
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "No se ha encontrado el contacto en la base de datos",
+                        "Error", JOptionPane.ERROR_MESSAGE);;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,
+                    "No se han podido leer los datos del contacto\n"
+                    + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);;
+            e.printStackTrace();
+        }
+        return agrupacion;
     }
 }
