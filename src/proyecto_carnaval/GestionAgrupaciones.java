@@ -28,11 +28,12 @@ public class GestionAgrupaciones {
     private String localidad;
     private Blob imagenAgrupacion;
 
-    public ArrayList<DatosAgrupaciones> list() {
+   public ArrayList<DatosAgrupaciones> list() {
         ArrayList<DatosAgrupaciones> informacionAgrupacion = new ArrayList();
         try {
             String sql = "Select * from agrupacion";
             stmt = Conexion.conexion.createStatement();
+           
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 id = rs.getInt("ID");
