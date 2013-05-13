@@ -4,7 +4,12 @@
  */
 package proyecto_carnaval;
 
+import java.awt.Frame;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -15,12 +20,13 @@ import javax.swing.table.TableColumn;
  */
 public class AgrupacionListaPanel extends javax.swing.JPanel {
 
+    ArrayList<DatosAgrupaciones> listaAgrupaciones = new ArrayList();
     private DefaultTableModel modeloTabla;
     GestionAgrupaciones gestion = new GestionAgrupaciones();
 
     void CargarDatosJTable() {
 
-        ArrayList<DatosAgrupaciones> listaAgrupaciones = new ArrayList();
+
 
         modeloTabla = new DefaultTableModel() {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -28,12 +34,12 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
             }
         };
         jTable1.setModel(modeloTabla);
-
+        listaAgrupaciones = gestion.list();
 
         String[] cabecera = {"Id", "Nombre", "Modalidad",};
         modeloTabla.setColumnIdentifiers(cabecera);
 
-        listaAgrupaciones = gestion.list();
+
 
         for (DatosAgrupaciones agrupacion : listaAgrupaciones) {
 
@@ -114,6 +120,9 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
         jLabelMusica = new javax.swing.JLabel();
         jLabelDirector = new javax.swing.JLabel();
         jLabelLocalidad = new javax.swing.JLabel();
+        editar = new javax.swing.JButton();
+        insertar = new javax.swing.JButton();
+        suprimir = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -213,23 +222,59 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
                 .addContainerGap(155, Short.MAX_VALUE))
         );
 
+        editar.setText("Editar");
+        editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editarActionPerformed(evt);
+            }
+        });
+
+        insertar.setText("Insertar");
+        insertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertarActionPerformed(evt);
+            }
+        });
+
+        suprimir.setText("Suprimir");
+        suprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                suprimirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(editar)
+                        .addGap(35, 35, 35)
+                        .addComponent(insertar)
+                        .addGap(40, 40, 40)
+                        .addComponent(suprimir)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(editar)
+                            .addComponent(insertar)
+                            .addComponent(suprimir)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -242,7 +287,46 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
         this.mostrarDatosAgrupacion();
     }//GEN-LAST:event_jTable1KeyReleased
+
+    private void suprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suprimirActionPerformed
+        if (jTable1.isColumnSelected(WIDTH)) {
+            listaAgrupaciones = gestion.list();
+            int index = jTable1.getSelectedRow();
+            DatosAgrupaciones agrupacion = listaAgrupaciones.get(index);
+            int numeroJoption = JOptionPane.showConfirmDialog(jTable1, "Estás seguro que deseas eliminar a " + agrupacion.getNombre(), "Confirmacion", JOptionPane.OK_CANCEL_OPTION);
+            if (numeroJoption == JOptionPane.OK_OPTION) {
+                gestion.delete(agrupacion);
+                this.CargarDatosJTable();
+            }
+        }
+    }//GEN-LAST:event_suprimirActionPerformed
+
+    private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
+    }//GEN-LAST:event_insertarActionPerformed
+
+    private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
+         int index = jTable1.getSelectedRow();
+        if(index!=-1) {
+            
+            DatosAgrupaciones agrupacion = listaAgrupaciones.get(index);
+            VentanaDetalle ventana = new VentanaDetalle(Frame.getFrames()[0],true);
+            ventana.setAgrupacion(agrupacion);
+            ventana.setLocationRelativeTo(null);
+            ventana.setVisible(true);
+            DatosAgrupaciones agrupacionNueva = ventana.getAgrupacion();
+            if(ventana.aceptado()){
+            gestion.update(agrupacionNueva);
+            this.CargarDatosJTable();
+            }
+
+        }
+        
+        
+    }//GEN-LAST:event_editarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton editar;
+    private javax.swing.JButton insertar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -260,5 +344,6 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton suprimir;
     // End of variables declaration//GEN-END:variables
 }
