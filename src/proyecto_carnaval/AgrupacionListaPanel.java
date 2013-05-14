@@ -289,7 +289,7 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTable1KeyReleased
 
     private void suprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suprimirActionPerformed
-        if (jTable1.isColumnSelected(WIDTH)) {
+        if (jTable1.getSelectedRow() != -1) {
             listaAgrupaciones = gestion.list();
             int index = jTable1.getSelectedRow();
             DatosAgrupaciones agrupacion = listaAgrupaciones.get(index);
@@ -301,29 +301,37 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_suprimirActionPerformed
 
-    private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
-    }//GEN-LAST:event_insertarActionPerformed
-
     private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
-         int index = jTable1.getSelectedRow();
-        if(index!=-1) {
-            
+        int index = jTable1.getSelectedRow();
+        if (index != -1) {
+
             DatosAgrupaciones agrupacion = listaAgrupaciones.get(index);
-            VentanaDetalle ventana = new VentanaDetalle(Frame.getFrames()[0],true);
+            VentanaDetalle ventana = new VentanaDetalle(Frame.getFrames()[0], true);
             ventana.setAgrupacion(agrupacion);
             ventana.setLocationRelativeTo(null);
             ventana.setVisible(true);
             DatosAgrupaciones agrupacionNueva = ventana.getAgrupacion();
-            if(ventana.aceptado()){
-            gestion.update(agrupacionNueva);
-            this.CargarDatosJTable();
+            if (ventana.aceptado()) {
+                gestion.update(agrupacionNueva);
+                this.CargarDatosJTable();
             }
 
         }
-        
-        
+
+
     }//GEN-LAST:event_editarActionPerformed
 
+    private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
+        GestionAgrupaciones gestion = new GestionAgrupaciones();
+        VentanaDetalle ventana = new VentanaDetalle(Frame.getFrames()[0], true);
+        DatosAgrupaciones agrupacion = new DatosAgrupaciones();
+        ventana.setAgrupacion(agrupacion);
+        ventana.setVisible(true);
+        if (ventana.aceptado()) {
+            gestion.Insert(agrupacion);
+            CargarDatosJTable();
+        }
+    }//GEN-LAST:event_insertarActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton editar;
     private javax.swing.JButton insertar;

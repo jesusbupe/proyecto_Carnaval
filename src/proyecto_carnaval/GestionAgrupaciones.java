@@ -112,15 +112,15 @@ public class GestionAgrupaciones {
         try {
 
             stmt = Conexion.conexion.createStatement();
-            String sql = "Update agrupacion set nombre =" + nombre
-                    + ", modalidad =" + modalidad
-                    + ", numComponentes =" + numComponentes
-                    + ",autorLetra =" + autorLetra
-                    + ", autorMusica =" + autorMusica
-                    + ", director =" + director
-                    + ", localidad =" + localidad
-                    + ", imagenAgrupacion =" + imagenAgrupacion
-                    + "where id =" + id;
+            String sql = "Update agrupacion set nombre ='" + nombre
+                    + "', modalidad ='" + modalidad
+                    + "', numComponentes ='" + numComponentes
+                    + "',autorLetra ='" + autorLetra
+                    + "', autorMusica ='" + autorMusica
+                    + "', director ='" + director
+                    + "', localidad ='" + localidad
+                    + "', imagenAgrupacion ='" + imagenAgrupacion
+                    + "' where id =" + id;
             stmt.executeUpdate(sql);
 
         } catch (SQLException ex) {
@@ -179,4 +179,21 @@ public class GestionAgrupaciones {
         }
         return agrupacion;
     }
+     public ArrayList<String> findModalidad() {
+        ArrayList<String> listaModalidad = new ArrayList();
+        try {
+            String sql = "Select modalidad from modalidades";
+            stmt = Conexion.conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String modalidad1 = rs.getString("modalidad");
+                listaModalidad.add(modalidad1);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al consultar la base de datos");
+            ex.printStackTrace();
+        }
+        return listaModalidad;
+    }
+
 }

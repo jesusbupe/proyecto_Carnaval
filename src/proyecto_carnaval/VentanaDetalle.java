@@ -4,35 +4,57 @@
  */
 package proyecto_carnaval;
 
+import java.util.ArrayList;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author DAW
  */
-public class  VentanaDetalle extends javax.swing.JDialog {
+public class VentanaDetalle extends javax.swing.JDialog {
 
     private DatosAgrupaciones agrupacion;
     boolean aceptado;
+    private GestionAgrupaciones gestion = new GestionAgrupaciones();
 
     public VentanaDetalle(java.awt.Frame parent, boolean modal) {
 
 
         super(parent, modal);
         initComponents();
+        this.CargarDatosCombo();
+
+
+
     }
 
     public DatosAgrupaciones getAgrupacion() {
         return agrupacion;
     }
 
-    public  void setAgrupacion(DatosAgrupaciones agrupacion) {
+    private void CargarDatosCombo() {
+        ArrayList listaNiveles = gestion.findModalidad();
+
+        int numElementos = listaNiveles.size();
+        String[] arrayParaJComboBox = new String[numElementos];
+        listaNiveles.toArray(arrayParaJComboBox);
+        ComboBoxModel c = new DefaultComboBoxModel(arrayParaJComboBox);
+        jComboBox1.setModel(c);
+
+
+    }
+
+    public void setAgrupacion(DatosAgrupaciones agrupacion) {
         this.agrupacion = agrupacion;
         if (agrupacion.getId() != 0) {
-           id.setText(String.valueOf(agrupacion.getId()));
+            id.setText(String.valueOf(agrupacion.getId()));
         } else {
             id.setText("Nuevo");
         }
         nombre.setText(agrupacion.getNombre());
-        modalidad.setText(agrupacion.getModalidad());
+        //modalidad.setText(agrupacion.getModalidad());
         componentes.setText(String.valueOf(agrupacion.getNumComponentes()));
         autorLetra.setText(agrupacion.getAutorLetra());
         autorMusica.setText(agrupacion.getAutorMusica());
@@ -40,21 +62,24 @@ public class  VentanaDetalle extends javax.swing.JDialog {
         localidad.setText(agrupacion.getLocalidad());
         imagen.setText(String.valueOf(agrupacion.getImagenAgrupacion()));
     }
+
     private void aceptar() {
         aceptado = true;
-       
-       
-            agrupacion.setNombre(nombre.getText());
-            agrupacion.setModalidad(modalidad.getText());
-            agrupacion.setNumComponentes(componentes.getText());
-            agrupacion.setAutorLetra(autorLetra.getText());
-            this.setVisible(false);
-        
+        agrupacion.setNombre(nombre.getText());
+        agrupacion.setModalidad(String.valueOf(jComboBox1.getSelectedItem()));
+        agrupacion.setNumComponentes(Integer.valueOf(componentes.getText()));
+        agrupacion.setAutorLetra(autorLetra.getText());
+        agrupacion.setAutorMusica(autorMusica.getText());
+        agrupacion.setDirector(director.getText());
+        agrupacion.setLocalidad(localidad.getText());
+        agrupacion.setImagenAgrupacion(null);
+        this.setVisible(false);
+
     }
-    
-    public boolean aceptado(){
-    return aceptado;
-    
+
+    public boolean aceptado() {
+        return aceptado;
+
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +95,6 @@ public class  VentanaDetalle extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         nombre = new javax.swing.JTextField();
-        modalidad = new javax.swing.JTextField();
         componentes = new javax.swing.JTextField();
         autorLetra = new javax.swing.JTextField();
         autorMusica = new javax.swing.JTextField();
@@ -82,6 +106,7 @@ public class  VentanaDetalle extends javax.swing.JDialog {
         id = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         imagen = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -114,6 +139,8 @@ public class  VentanaDetalle extends javax.swing.JDialog {
 
         jLabel9.setText("Imagen");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -137,14 +164,16 @@ public class  VentanaDetalle extends javax.swing.JDialog {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(localidad, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(director)
-                                    .addComponent(modalidad)
                                     .addComponent(componentes, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(autorLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(autorMusica)
                                     .addComponent(nombre))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(15, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -177,7 +206,7 @@ public class  VentanaDetalle extends javax.swing.JDialog {
                         .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(modalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(14, 14, 14)
                         .addComponent(jLabel3))
                     .addComponent(componentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -216,11 +245,11 @@ public class  VentanaDetalle extends javax.swing.JDialog {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(32, 32, 32)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(35, Short.MAX_VALUE)))
+                    .addContainerGap(39, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 418, Short.MAX_VALUE)
+            .addGap(0, 474, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -232,10 +261,10 @@ public class  VentanaDetalle extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       aceptado=true;
-       this.aceptar;
-        this.setVisible(false);        
-        
+        aceptado = true;
+        this.aceptar();
+        this.setVisible(false);
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -287,6 +316,7 @@ public class  VentanaDetalle extends javax.swing.JDialog {
     private javax.swing.JLabel id;
     private javax.swing.JTextField imagen;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -299,7 +329,6 @@ public class  VentanaDetalle extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTextField localidad;
-    private javax.swing.JTextField modalidad;
     private javax.swing.JTextField nombre;
     // End of variables declaration//GEN-END:variables
 }
