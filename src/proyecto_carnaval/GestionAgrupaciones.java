@@ -45,7 +45,7 @@ public class GestionAgrupaciones {
                 autorMusica = rs.getString("AutorMusica");
                 director = rs.getString("Director");
                 localidad = rs.getString("Localidad");
-                imagenAgrupacion =rs.getBlob("imagenAgrupacion");
+                imagenAgrupacion = rs.getBlob("imagenAgrupacion");
                 DatosAgrupaciones agrupacion = new DatosAgrupaciones(id, nombre, modalidad, numComponentes, autorLetra, autorMusica, director, localidad, imagenAgrupacion);
                 informacionAgrupacion.add(agrupacion);
 
@@ -162,9 +162,9 @@ public class GestionAgrupaciones {
                 String autorMusica = rs.getString("AutorMusica");
                 String director = rs.getString("Director");
                 String localidad = rs.getString("Localidad");
-                Blob imagenAgrupacion =rs.getBlob("imagenAgrupacion");
+                Blob imagenAgrupacion = rs.getBlob("imagenAgrupacion");
                 agrupacion = new DatosAgrupaciones(
-                        id, nombre, modalidad, numComponentes, autorLetra, autorMusica, director,localidad,imagenAgrupacion);
+                        id, nombre, modalidad, numComponentes, autorLetra, autorMusica, director, localidad, imagenAgrupacion);
             } else {
                 JOptionPane.showMessageDialog(null,
                         "No se ha encontrado el contacto en la base de datos",
@@ -179,15 +179,17 @@ public class GestionAgrupaciones {
         }
         return agrupacion;
     }
-     public ArrayList<String> findModalidad() {
-        ArrayList<String> listaModalidad = new ArrayList();
+
+    public ArrayList<Modalidad> findModalidad() {
+        ArrayList<Modalidad> listaModalidad = new ArrayList();
         try {
-            String sql = "Select modalidad from modalidades";
+            String sql = "Select * from modalidades";
             stmt = Conexion.conexion.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                String modalidad1 = rs.getString("modalidad");
+                Modalidad modalidad1 = new Modalidad(rs.getInt("id"), rs.getString("modalidad"));                         
                 listaModalidad.add(modalidad1);
+                 
             }
         } catch (SQLException ex) {
             System.out.println("Error al consultar la base de datos");
@@ -196,4 +198,5 @@ public class GestionAgrupaciones {
         return listaModalidad;
     }
 
+    
 }

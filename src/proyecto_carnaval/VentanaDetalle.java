@@ -4,48 +4,73 @@
  */
 package proyecto_carnaval;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 
 /**
  *
  * @author DAW
  */
 public class VentanaDetalle extends javax.swing.JDialog {
-    
+
     private DatosAgrupaciones agrupacion;
     boolean aceptado;
-    private GestionAgrupaciones gestion = new GestionAgrupaciones();
-    
+    public GestionAgrupaciones gestion = new GestionAgrupaciones();
+    Statement stmt = null;
+
     public VentanaDetalle(java.awt.Frame parent, boolean modal) {
-        
-        
+
         super(parent, modal);
         initComponents();
         this.CargarDatosCombo();
-        
-        
-        
+
+
     }
-    
+
     public DatosAgrupaciones getAgrupacion() {
         return agrupacion;
     }
-    
+
     private void CargarDatosCombo() {
         ArrayList listaNiveles = gestion.findModalidad();
-        
+
         int numElementos = listaNiveles.size();
+
         String[] arrayParaJComboBox = new String[numElementos];
         listaNiveles.toArray(arrayParaJComboBox);
         ComboBoxModel c = new DefaultComboBoxModel(arrayParaJComboBox);
         jComboBox1.setModel(c);
-        
-        
+
+        System.out.println(agrupacion.getModalidad());
+
     }
-    
+
+    private void SeleccionarDatosCombo() {
+        ArrayList listaNiveles = gestion.findModalidad();
+        int numElementos = listaNiveles.size();
+        Modalidad[] arrayParajComboBox = new Modalidad[numElementos];
+
+        for (int i = 0; i < gestion.findModalidad().size(); i++) {
+            int id_modalidad = gestion.findModalidad().get(i).getIdModalidad();
+            int id_agrupacion = getAgrupacion().getId();
+
+            if (id_modalidad == id_agrupacion) {
+
+
+                jComboBox1.setSelectedIndex(i);
+            }
+
+        }
+
+
+
+
+    }
+
     public void setAgrupacion(DatosAgrupaciones agrupacion) {
         this.agrupacion = agrupacion;
         if (agrupacion.getId() != 0) {
@@ -61,8 +86,9 @@ public class VentanaDetalle extends javax.swing.JDialog {
         director.setText(agrupacion.getDirector());
         localidad.setText(agrupacion.getLocalidad());
         imagen.setText(String.valueOf(agrupacion.getImagenAgrupacion()));
+        SeleccionarDatosCombo();
     }
-    
+
     private void aceptar() {
         aceptado = true;
         agrupacion.setNombre(nombre.getText());
@@ -74,14 +100,14 @@ public class VentanaDetalle extends javax.swing.JDialog {
         agrupacion.setLocalidad(localidad.getText());
         agrupacion.setImagenAgrupacion(null);
         this.setVisible(false);
-        
+
     }
-    
+
     public boolean aceptado() {
         return aceptado;
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -271,9 +297,9 @@ public class VentanaDetalle extends javax.swing.JDialog {
         aceptado = true;
         this.aceptar();
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
