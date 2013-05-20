@@ -5,6 +5,11 @@
 package proyecto_carnaval;
 
 import java.sql.Blob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,9 +17,10 @@ import java.sql.Blob;
  */
 public class DatosAgrupaciones {
 
+    Statement stmt = null;
     private int id;
     private String nombre;
-    private String modalidad;
+    private int modalidad;
     private int numComponentes;
     private String autorLetra;
     private String autorMusica;
@@ -25,7 +31,7 @@ public class DatosAgrupaciones {
     public DatosAgrupaciones() {
     }
 
-    public DatosAgrupaciones(int id,String nombre, String modalidad, int numComponentes, String autorLetra, String autorMusica, String director, String localidad, Blob imagenAgrupacion) {
+    public DatosAgrupaciones(int id, String nombre, int modalidad, int numComponentes, String autorLetra, String autorMusica, String director, String localidad, Blob imagenAgrupacion) {
         this.id = id;
         this.nombre = nombre;
         this.modalidad = modalidad;
@@ -54,11 +60,11 @@ public class DatosAgrupaciones {
         this.nombre = nombre;
     }
 
-    public String getModalidad() {
+    public int getModalidad() {
         return modalidad;
     }
 
-    public void setModalidad(String modalidad) {
+    public void setModalidad(int modalidad) {
         this.modalidad = modalidad;
     }
 
@@ -108,5 +114,25 @@ public class DatosAgrupaciones {
 
     public void setImagenAgrupacion(Blob imagenAgrupacion) {
         this.imagenAgrupacion = imagenAgrupacion;
+    }
+
+    public String dameModalidad(int idMod) {
+        String nombreModalidad = null;
+        
+
+        String sql = "Select * from modalidades  where Modalidades.id= " + idMod;
+
+        try {
+            stmt = Conexion.conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+           if (rs.next()) {
+            nombreModalidad = rs.getString("modalidad");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionAgrupaciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+        return nombreModalidad;
     }
 }

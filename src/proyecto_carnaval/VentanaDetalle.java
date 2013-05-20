@@ -25,8 +25,10 @@ public class VentanaDetalle extends javax.swing.JDialog {
     public VentanaDetalle(java.awt.Frame parent, boolean modal) {
 
         super(parent, modal);
+        agrupacion = this.getAgrupacion();
         initComponents();
-        this.CargarDatosCombo();
+        //this.CargarDatosCombo();
+
 
 
     }
@@ -35,37 +37,34 @@ public class VentanaDetalle extends javax.swing.JDialog {
         return agrupacion;
     }
 
-    private void CargarDatosCombo() {
-        ArrayList listaNiveles = gestion.findModalidad();
+    private void SeleccionarDatosCombo() {
+        int id_modalidad;
+        int id_agrupacionMod;
 
-        int numElementos = listaNiveles.size();
+        int numElementos = gestion.findModalidad().size();
+        System.out.println(numElementos + "Numelementos");
+        Modalidad[] arrayParaCombo = new Modalidad[numElementos];
+        gestion.findModalidad().toArray(arrayParaCombo);
 
-        String[] arrayParaJComboBox = new String[numElementos];
-        listaNiveles.toArray(arrayParaJComboBox);
-        ComboBoxModel c = new DefaultComboBoxModel(arrayParaJComboBox);
+        for (int i = 0; i < numElementos; i++) {
+            System.out.println(gestion.findModalidad().get(i).getIdModalidad());
+        }
+
+
+        ComboBoxModel c = new DefaultComboBoxModel(arrayParaCombo);
         jComboBox1.setModel(c);
 
-        System.out.println(agrupacion.getModalidad());
-
-    }
-
-    private void SeleccionarDatosCombo() {
-        ArrayList listaNiveles = gestion.findModalidad();
-        int numElementos = listaNiveles.size();
-        Modalidad[] arrayParajComboBox = new Modalidad[numElementos];
 
         for (int i = 0; i < gestion.findModalidad().size(); i++) {
-            int id_modalidad = gestion.findModalidad().get(i).getIdModalidad();
-            int id_agrupacion = getAgrupacion().getId();
 
-            if (id_modalidad == id_agrupacion) {
-
+            id_modalidad = gestion.findModalidad().get(i).getIdModalidad();
+            id_agrupacionMod = getAgrupacion().getModalidad();
+            if (id_modalidad == id_agrupacionMod) {
 
                 jComboBox1.setSelectedIndex(i);
             }
 
         }
-
 
 
 
@@ -79,20 +78,25 @@ public class VentanaDetalle extends javax.swing.JDialog {
             id.setText("Nuevo");
         }
         nombre.setText(agrupacion.getNombre());
-        //modalidad.setText(agrupacion.getModalidad());
         componentes.setText(String.valueOf(agrupacion.getNumComponentes()));
         autorLetra.setText(agrupacion.getAutorLetra());
         autorMusica.setText(agrupacion.getAutorMusica());
         director.setText(agrupacion.getDirector());
         localidad.setText(agrupacion.getLocalidad());
         imagen.setText(String.valueOf(agrupacion.getImagenAgrupacion()));
-        SeleccionarDatosCombo();
+
+
+        this.SeleccionarDatosCombo();
+
     }
 
     private void aceptar() {
+
+        Modalidad modalidadSelec = (Modalidad) jComboBox1.getSelectedItem();
+
         aceptado = true;
         agrupacion.setNombre(nombre.getText());
-        agrupacion.setModalidad(String.valueOf(jComboBox1.getSelectedItem()));
+        agrupacion.setModalidad(modalidadSelec.getIdModalidad());
         agrupacion.setNumComponentes(Integer.valueOf(componentes.getText()));
         agrupacion.setAutorLetra(autorLetra.getText());
         agrupacion.setAutorMusica(autorMusica.getText());
@@ -196,18 +200,20 @@ public class VentanaDetalle extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(localidad, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(director)
-                                    .addComponent(componentes, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(autorLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(autorMusica)
-                                    .addComponent(nombre))
+                                    .addComponent(nombre)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(localidad, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(autorLetra, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
                                 .addContainerGap(20, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(componentes, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel9)
@@ -231,17 +237,19 @@ public class VentanaDetalle extends javax.swing.JDialog {
                         .addContainerGap()
                         .addComponent(id, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel3))
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
                     .addComponent(componentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -282,10 +290,10 @@ public class VentanaDetalle extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 474, Short.MAX_VALUE)
+            .addGap(0, 491, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addContainerGap(25, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap()))
         );

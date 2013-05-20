@@ -5,6 +5,7 @@
 package proyecto_carnaval;
 
 import java.sql.Blob;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,11 +18,11 @@ import javax.swing.JOptionPane;
  */
 public class GestionAgrupaciones {
 
-    Statement stmt = null;
+  Statement stmt = null;
     int autoincrementoID;
     private int id;
     private String nombre;
-    private String modalidad;
+    private int modalidad;
     private int numComponentes;
     private String autorLetra;
     private String autorMusica;
@@ -39,7 +40,7 @@ public class GestionAgrupaciones {
             while (rs.next()) {
                 id = rs.getInt("ID");
                 nombre = rs.getString("Nombre");
-                modalidad = rs.getString("Modalidad");
+                modalidad = rs.getInt("Modalidad");
                 numComponentes = rs.getInt("NumComponentes");
                 autorLetra = rs.getString("AutorLetra");
                 autorMusica = rs.getString("AutorMusica");
@@ -60,6 +61,7 @@ public class GestionAgrupaciones {
     }
 
     int Insert(DatosAgrupaciones agrupacion) {
+        
         id = agrupacion.getId();
         nombre = agrupacion.getNombre();
         modalidad = agrupacion.getModalidad();
@@ -71,14 +73,16 @@ public class GestionAgrupaciones {
         imagenAgrupacion = agrupacion.getImagenAgrupacion();
 
         String sql = "INSERT INTO agrupacion (ID,nombre,modalidad,numComponentes,autorLetra,autorMusica,director,localidad,imagenAgrupacion) VALUES "
-                + "('" + id + "','" + nombre + "','" + modalidad + "','" + numComponentes + "','" + autorLetra + "','" + autorMusica + "','" + director + "','" + localidad + "','" + imagenAgrupacion + "')";
+                + "('" + id + "','" + nombre + "','" + modalidad + "','" + numComponentes + "','" + autorLetra + "','" + autorMusica + "','" + director + "','" + localidad + "','? ')";
 
 
 
         try {
-            Statement sentenciaSQL = Conexion.conexion.createStatement();
-            sentenciaSQL.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-            ResultSet resultado = sentenciaSQL.getGeneratedKeys();
+            PreparedStatement pstmt = Conexion.conexion.prepareStatement(sql);
+            pstmt.setBlob(1,imagenAgrupacion);
+            pstmt.execute();
+            pstmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultado = pstmt.getGeneratedKeys();
 
             if (resultado.next()) {
                 autoincrementoID = resultado.getInt(1);
@@ -119,8 +123,7 @@ public class GestionAgrupaciones {
                     + "', autorMusica ='" + autorMusica
                     + "', director ='" + director
                     + "', localidad ='" + localidad
-                    + "', imagenAgrupacion ='" + imagenAgrupacion
-                    + "' where id =" + id;
+                    + "', imagenAgrupacion ='?' where id =" + id;
             stmt.executeUpdate(sql);
 
         } catch (SQLException ex) {
@@ -156,7 +159,7 @@ public class GestionAgrupaciones {
             if (rs.next()) {
                 int id = rs.getInt("ID");
                 String nombre = rs.getString("Nombre");
-                String modalidad = rs.getString("Modalidad");
+                int modalidad = rs.getInt("Modalidad");
                 int numComponentes = rs.getInt("NumComponentes");
                 String autorLetra = rs.getString("AutorLetra");
                 String autorMusica = rs.getString("AutorMusica");
@@ -187,9 +190,9 @@ public class GestionAgrupaciones {
             stmt = Conexion.conexion.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Modalidad modalidad1 = new Modalidad(rs.getInt("id"), rs.getString("modalidad"));                         
+                Modalidad modalidad1 = new Modalidad(rs.getInt("id"), rs.getString("modalidad"));
                 listaModalidad.add(modalidad1);
-                 
+
             }
         } catch (SQLException ex) {
             System.out.println("Error al consultar la base de datos");
@@ -197,6 +200,4 @@ public class GestionAgrupaciones {
         }
         return listaModalidad;
     }
-
-    
 }

@@ -19,15 +19,15 @@ import javax.swing.table.TableColumn;
  * @author jesus
  */
 public class AgrupacionListaPanel extends javax.swing.JPanel {
-
+    
     ArrayList<DatosAgrupaciones> listaAgrupaciones = new ArrayList();
     private DefaultTableModel modeloTabla;
     GestionAgrupaciones gestion = new GestionAgrupaciones();
-
+    
     void CargarDatosJTable() {
-
-
-
+        
+        
+        
         modeloTabla = new DefaultTableModel() {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
@@ -35,43 +35,44 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
         };
         jTable1.setModel(modeloTabla);
         listaAgrupaciones = gestion.list();
-
+        
         String[] cabecera = {"Id", "Nombre", "Modalidad",};
         modeloTabla.setColumnIdentifiers(cabecera);
-
-
-
+        
+        
+        
         for (DatosAgrupaciones agrupacion : listaAgrupaciones) {
-
+            
             String[] datosFilaAgrupacion = {
                 String.valueOf(agrupacion.getId()),
                 agrupacion.getNombre(),
-                agrupacion.getModalidad(),};
+                String.valueOf(agrupacion.dameModalidad(agrupacion.getModalidad())),};
             modeloTabla.addRow(datosFilaAgrupacion);
         }
-
-
+        
+        
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        
         TableColumn tc = jTable1.getColumn("Id");
-
+        
         jTable1.removeColumn(tc);
-
+        
         this.mostrarDatosAgrupacion();
-
+        
     }
-
+    
     void mostrarDatosAgrupacion() {
-
+        
         int numFilaSelec = jTable1.getSelectedRow();
-
+        
         if (numFilaSelec != -1) {
-
+            
+            
             DatosAgrupaciones agrupacion = GestionAgrupaciones.leerAgrupacion(
                     Integer.valueOf((String) modeloTabla.getValueAt(numFilaSelec, 0)));
-
+            
             jLabelNombre.setText(agrupacion.getNombre());
-            jLabelModalidad.setText(agrupacion.getModalidad());
+            jLabelModalidad.setText(agrupacion.dameModalidad(agrupacion.getModalidad()));
             jLabelNumero.setText(String.valueOf(agrupacion.getNumComponentes()));
             jLabelLetra.setText(agrupacion.getAutorLetra());
             jLabelMusica.setText(agrupacion.getAutorMusica());
@@ -86,19 +87,19 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
             jLabelDirector.setText("");
             jLabelLocalidad.setText("");
         }
-
+        
     }
-
+    
     public AgrupacionListaPanel() {
         initComponents();
         Conexion.conectar("localhost", "root", "");
         this.CargarDatosJTable();
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(210);
-
-
+        
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -283,11 +284,11 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         this.mostrarDatosAgrupacion();
     }//GEN-LAST:event_jTable1MouseClicked
-
+    
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
         this.mostrarDatosAgrupacion();
     }//GEN-LAST:event_jTable1KeyReleased
-
+    
     private void suprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_suprimirActionPerformed
         if (jTable1.getSelectedRow() != -1) {
             listaAgrupaciones = gestion.list();
@@ -300,11 +301,11 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_suprimirActionPerformed
-
+    
     private void editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarActionPerformed
         int index = jTable1.getSelectedRow();
         if (index != -1) {
-
+            
             DatosAgrupaciones agrupacion = listaAgrupaciones.get(index);
             VentanaDetalle ventana = new VentanaDetalle(Frame.getFrames()[0], true);
             ventana.setAgrupacion(agrupacion);
@@ -315,12 +316,12 @@ public class AgrupacionListaPanel extends javax.swing.JPanel {
                 gestion.update(agrupacionNueva);
                 this.CargarDatosJTable();
             }
-
+            
         }
-
-
+        
+        
     }//GEN-LAST:event_editarActionPerformed
-
+    
     private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
         GestionAgrupaciones gestion = new GestionAgrupaciones();
         VentanaDetalle ventana = new VentanaDetalle(Frame.getFrames()[0], true);

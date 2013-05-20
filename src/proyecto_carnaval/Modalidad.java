@@ -12,9 +12,9 @@ public class Modalidad {
    private int idModalidad;
     private String modalidad;
     
-    public Modalidad (int idModalidad,String Modalidad){
+    public Modalidad (int idModalidad,String modalidad){
     this.idModalidad=idModalidad;
-    this.modalidad=modalidad;
+    this.modalidad = modalidad;
     
     }
     public int getIdModalidad() {
